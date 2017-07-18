@@ -16,6 +16,7 @@ import cn.edu.nuc.androidlab.weather.adapter.MyClickListener
 import cn.edu.nuc.androidlab.weather.bean.City
 import cn.edu.nuc.androidlab.weather.bean.Country
 import cn.edu.nuc.androidlab.weather.bean.Province
+import cn.edu.nuc.androidlab.weather.db.AreaManager
 import cn.edu.nuc.androidlab.weather.service.Service
 import cn.edu.nuc.androidlab.weather.ui.activity.WeatherActivity
 
@@ -48,67 +49,114 @@ class ChooseAreaFragment : Fragment() {
     private lateinit var recyclerView : RecyclerView
     private lateinit var adapter : AreaAdapter
 
+    private lateinit var manager : AreaManager
+
     private fun loadCity(){
-        Service.api_area.getCity(selectProvince!!.id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                {
-                    toolbar.title = selectProvince!!.name
-                    city += it
-                    it.forEach { data += it.name }
-                    adapter.notifyDataSetChanged()
-                    Log.i(TAG, it.toString())
-                },
-                {
-                    Log.w(TAG,"loadCity fail: $it")
-                },
-                {
-                    Log.w(TAG,"loadCity success")
-                }
-        )
+        toolbar.title = selectProvince!!.name
+
+        val list = manager.queryCity(selectProvince!!.id)
+        if(list.isEmpty()){
+            Service.api_area.getCity(selectProvince!!.id)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            {
+                                city += it
+                                it.forEach { data += it.name }
+                                adapter.notifyDataSetChanged()
+                                manager.insertCity(it, selectProvince!!)
+                                Log.i(TAG, it.toString())
+                            },
+                            {
+                                Log.w(TAG,"loadCity fail: $it")
+                            },
+                            {
+                                Log.w(TAG,"loadCity success")
+                            }
+                    )
+        }else{
+            list.forEach {
+                city += it
+                data += it.name
+                adapter.notifyDataSetChanged()
+                Log.i(TAG, it.toString())
+            }
+        }
+
     }
 
     private fun loadCountry() {
-        Service.api_area.getCountry(selectProvince!!.id, selectCity!!.id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                {
-                    toolbar.title = selectCity!!.name
-                    country += it
-                    it.forEach { data += it.name }
-                    adapter.notifyDataSetChanged()
-                    Log.i(TAG, it.toString())
-                },
-                {
-                    Log.w(TAG,"loadCountry fail $it")
-                },
-                {
-                    Log.w(TAG,"loadCountry success")
-                }
-        )
+        toolbar.title = selectCity!!.name
+
+        val list = manager.queryCountry(selectCity!!.id)
+        if(list.isEmpty()){
+            Service.api_area.getCountry(selectProvince!!.id, selectCity!!.id)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            {
+                                country += it
+                                it.forEach { data += it.name }
+                                adapter.notifyDataSetChanged()
+                                manager.insertCountry(it, selectCity!!)
+                                Log.i(TAG, it.toString())
+                            },
+                            {
+                                Log.w(TAG,"loadCountry fail $it")
+                            },
+                            {
+                                Log.w(TAG,"loadCountry success")
+                            }
+                    )
+        }else{
+            list.forEach {
+                country += it
+                data += it.name
+                adapter.notifyDataSetChanged()
+                Log.i(TAG, it.toString())
+            }
+
+        }
+
     }
 
     private fun loadProvince() {
-        Service.api_area.getProvinces()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                {
-                    toolbar.title = resources.getString(R.string.select_province)
-                    provinces += it
-                    it.forEach { data += it.name }
-                    adapter.notifyDataSetChanged()
-                    Log.i(TAG, it.toString())
-                },
-                {
-                    Log.w(TAG,"loadProvince fail $it")
-                },
-                {
-                    Log.w(TAG,"loadProvince success")
-                }
-        )
+        toolbar.title = resources.getString(R.string.select_province)
+
+        val list = manager.queryProvince()
+        if(list.isEmpty()){
+            Service.api_area.getProvinces()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            {
+                                provinces += it
+                                it.forEach { data += it.name }
+                                adapter.notifyDataSetChanged()
+                                manager.insertProvinces(it)
+                                Log.i(TAG, it.toString())
+                            },
+                            {
+                                Log.w(TAG,"loadProvince fail $it")
+                            },
+                            {
+                                Log.w(TAG,"loadProvince success")
+                            }
+                    )
+        }else{
+            list.forEach {
+                provinces += it
+                data += it.name
+                adapter.notifyDataSetChanged()
+                Log.i(TAG, it.toString())
+            }
+        }
+
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        manager = AreaManager.instance()
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {

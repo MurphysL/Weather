@@ -39,8 +39,9 @@
             <TextView
                 android:id="@+id/degree"
                 android:gravity="center"
+                android:textColor="@color/colorWhite"
                 android:text="29"
-                android:textSize="50sp"
+                android:textSize="60sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true" />
@@ -49,6 +50,7 @@
                 android:id="@+id/type"
                 android:gravity="center"
                 android:text="晴"
+                android:textColor="@color/colorWhite"
                 android:layout_below="@+id/degree"
                 android:textSize="24sp"
                 android:layout_width="wrap_content"

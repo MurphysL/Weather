@@ -1,6 +1,7 @@
 package cn.edu.nuc.androidlab.weather
 
 import android.app.Application
+import kotlin.properties.Delegates
 
 /**
  * App
@@ -8,8 +9,7 @@ import android.app.Application
  */
 class App : Application(){
     companion object {
-        private var instance : App? = null
-        fun instance() = instance
+        var instance : Application by Delegates.notNull()
     }
 
     override fun onCreate() {

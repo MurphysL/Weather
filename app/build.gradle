@@ -51,6 +51,8 @@ dependencies {
     compile "org.jetbrains.anko:anko-appcompat-v7-commons:$anko_version"
     // Support-v4 (only Anko Commons)
     compile "org.jetbrains.anko:anko-support-v4-commons:$anko_version"
+    // Anko SQLite
+    compile "org.jetbrains.anko:anko-sqlite:$anko_version"
 }
 repositories {
     mavenCentral()
