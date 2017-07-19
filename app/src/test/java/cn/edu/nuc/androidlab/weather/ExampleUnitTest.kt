@@ -1,6 +1,6 @@
 
 
-import cn.edu.nuc.androidlab.weather.service.Service
+import cn.edu.nuc.androidlab.weather.net.Service
 import org.junit.Test
 
 import org.junit.Assert.*

@@ -1,7 +1,9 @@
 package cn.edu.nuc.androidlab.weather
 
-import cn.edu.nuc.androidlab.weather.service.Service
+import cn.edu.nuc.androidlab.weather.net.Service
+import org.json.JSONObject
 import org.junit.Test
+import java.net.URL
 
 /**
  * HeWeatherTest

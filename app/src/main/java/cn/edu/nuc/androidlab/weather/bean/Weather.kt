@@ -135,4 +135,5 @@ data class Weather(var HeWeather5: List<HeWeather>) {
                             var spd: String)
         }
     }
+    
 }

@@ -1,4 +1,4 @@
-package cn.edu.nuc.androidlab.weather.service
+package cn.edu.nuc.androidlab.weather.net
 
 import cn.edu.nuc.androidlab.weather.bean.*
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -48,9 +48,9 @@ interface AreaService {
 private const val KEY : String = "db60a26e5d764427a0de9a179da2d18b"
 
 interface HeWeatherService{
-    @GET("weather?key=$KEY")
+    @GET("weather?key=${KEY}")
     fun getWeatherDetail(@Query("city") city : String) : Observable<Weather>
 
-    @GET("hourly?key=$KEY")
+    @GET("hourly?key=${KEY}")
     fun getHourly(@Query("city") city : String) : Observable<Hourly>
 }
