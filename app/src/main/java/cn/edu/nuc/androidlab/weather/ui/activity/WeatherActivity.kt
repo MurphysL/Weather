@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.support.v4.view.GravityCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
@@ -11,6 +12,7 @@ import android.view.View
 import cn.edu.nuc.androidlab.weather.R
 import cn.edu.nuc.androidlab.weather.adapter.ForecastAdapter
 import cn.edu.nuc.androidlab.weather.bean.Weather
+import cn.edu.nuc.androidlab.weather.db.AreaManager
 import cn.edu.nuc.androidlab.weather.service.Service
 import com.bumptech.glide.Glide
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -30,16 +32,26 @@ class WeatherActivity : AppCompatActivity(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if(Build.VERSION.SDK_INT >= 21){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
             val decorView : View = window.decorView
-            decorView.systemUiVisibility= View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+            decorView.systemUiVisibility= View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
             window.statusBarColor = Color.TRANSPARENT
         }
         setContentView(R.layout.activity_weather)
 
-        val area = intent.getStringExtra("country_code")
 
-        getWeather(area)
+        val area = intent.getStringExtra("country_code")
+        more.setOnClickListener {
+            drawer_layout.openDrawer(GravityCompat.START)
+        }
+
+        swipe.isRefreshing = true
+        swipe.setOnRefreshListener {
+            handleWeather(area)
+        }
+
+
+        handleWeather(area)
     }
 
     private fun showForecast(forecast: List<Weather.HeWeather.DailyForecast>) {
@@ -61,7 +73,16 @@ class WeatherActivity : AppCompatActivity(){
         uv.text = "${resources.getString(R.string.uv)}${suggestion.uv.txt}"
     }
 
-    private fun getWeather(area : String) {
+    private fun  showNow(now: Weather.HeWeather.Now) {
+        with(now){
+            degree.text = "$tmp℃"
+            type.text = cond.txt
+        }
+    }
+
+    fun handleWeather(area : String) {
+        tv_area.text = AreaManager.instance().queryCountryByWeatherId(area)[0].name
+
         doAsync {
             val url = URL("http://guolin.tech/api/bing_pic")
             val s = url.readText()
@@ -82,22 +103,17 @@ class WeatherActivity : AppCompatActivity(){
                                 showSuggestion(weather_deatil.suggestion)
                                 showNow(weather_deatil.now)
                             }
+                            swipe.isRefreshing = false
                         },
                         {
-                            Log.w(TAG,"getWeather fail $it")
+                            swipe.isRefreshing = false
+                            Log.w(TAG,"handleWeather fail $it")
                         },
                         {
+                            swipe.isRefreshing = false
                             Log.w(TAG,"loadCountry success")
                         }
                 )
     }
-
-    private fun  showNow(now: Weather.HeWeather.Now) {
-        with(now){
-            degree.text = "$tmp℃"
-            type.text = cond.txt
-        }
-    }
-
 
 }

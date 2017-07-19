@@ -18,13 +18,13 @@ class AreaDbHelper : ManagedSQLiteOpenHelper(App.instance, AreaDbHelper.DB_NAME,
         p0?.createTable(CityTable.NAME , true,
                 CityTable.CITY_ID to INTEGER + PRIMARY_KEY,
                 CityTable.CITY_NAME to TEXT,
-                CityTable.PROVINCE to TEXT)
+                CityTable.PROVINCE to INTEGER)
 
         p0?.createTable(CountryTable.NAME, true,
                 CountryTable.COUNTRY_ID to INTEGER + PRIMARY_KEY,
                 CountryTable.COUNTRY_NAME to TEXT,
                 CountryTable.WEAHTER_ID to TEXT,
-                CountryTable.CITY to TEXT)
+                CountryTable.CITY to INTEGER)
     }
 
     override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int) {

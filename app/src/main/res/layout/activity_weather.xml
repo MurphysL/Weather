@@ -1,241 +1,267 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="@color/cardview_dark_background"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.activity.WeatherActivity">
 
-   <!-- <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:background="@color/colorPrimary"
-        app:titleTextColor="@color/colorWhite"
+    <ImageView
+        android:id="@+id/imageView"
+        android:scaleType="centerCrop"
         android:layout_width="match_parent"
-        android:layout_height="80dp">
+        android:layout_height="match_parent" />
 
-
-
-    </android.support.v7.widget.Toolbar>-->
-
-    <FrameLayout
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <ImageView
-            android:id="@+id/imageView"
-            android:scaleType="fitXY"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </FrameLayout>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
         <RelativeLayout
-            android:padding="20dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/degree"
-                android:gravity="center"
-                android:textColor="@color/colorWhite"
-                android:text="29"
-                android:textSize="60sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true" />
+            android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/type"
-                android:gravity="center"
-                android:text="晴"
-                android:textColor="@color/colorWhite"
-                android:layout_below="@+id/degree"
-                android:textSize="24sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true" />
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:background="@color/colorHalfTransparent"
-                android:id="@+id/forecast"
-                android:layout_below="@+id/type"
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/swipe"
                 android:layout_width="match_parent"
-                android:layout_height="200dp">
-                <TextView
-                    android:textColor="@color/colorWhite"
-                    android:layout_margin="5dp"
-                    android:text="@string/forecast"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/daily_forecast"
+                android:layout_height="match_parent">
+                <ScrollView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                </android.support.v7.widget.RecyclerView>
-            </LinearLayout>
+                    <RelativeLayout
+                        android:padding="20dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-            <LinearLayout
-                android:padding="5dp"
-                android:layout_marginTop="40dp"
-                android:background="@color/colorHalfTransparent"
-                android:orientation="vertical"
-                android:id="@+id/aqi_layout"
-                android:layout_below="@+id/forecast"
-                android:layout_width="match_parent"
-                android:layout_height="140dp">
-                <TextView
-                    android:textColor="@color/colorWhite"
-                    android:layout_margin="5dp"
-                    android:text="@string/aqi"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <LinearLayout
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:orientation="vertical"
-                        android:layout_height="match_parent">
-                        <TextView
-                            android:id="@+id/aqi"
-                            android:textColor="@color/colorWhite"
-                            android:layout_marginTop="10dp"
-                            android:textSize="50sp"
-                            android:text="63"
-                            android:gravity="center"
-                            android:layout_width="match_parent"
+                        <ImageView
+                            android:id="@+id/more"
+                            android:src="@drawable/ic_business_black_24dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
 
                         <TextView
+                            android:id="@+id/tv_area"
+                            android:textSize="20sp"
                             android:textColor="@color/colorWhite"
-                            android:textSize="14sp"
-                            android:gravity="center"
-                            android:text="@string/aqiindex"
-                            android:layout_width="match_parent"
+                            android:layout_centerHorizontal="true"
+                            android:text="太原"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:layout_below="@+id/tv_area"
+                            android:id="@+id/degree"
+                            android:gravity="center"
+                            android:textColor="@color/colorWhite"
+                            android:text="29"
+                            android:textSize="60sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true" />
+
+                        <TextView
+                            android:id="@+id/type"
+                            android:gravity="center"
+                            android:text="晴"
+                            android:textColor="@color/colorWhite"
+                            android:layout_below="@+id/degree"
+                            android:textSize="24sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true" />
 
                         <LinearLayout
-                            android:layout_weight="1"
-                            android:layout_width="0dp"
                             android:orientation="vertical"
-                            android:layout_height="match_parent">
+                            android:background="@color/colorHalfTransparent"
+                            android:layout_marginTop="20dp"
+                            android:id="@+id/forecast"
+                            android:layout_below="@+id/type"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
                             <TextView
-                                android:id="@+id/pm25"
                                 android:textColor="@color/colorWhite"
-                                android:layout_marginTop="10dp"
-                                android:textSize="50sp"
-                                android:text="63"
-                                android:gravity="center"
+                                android:layout_margin="5dp"
+                                android:text="@string/forecast"
+                                android:textStyle="bold"
+                                android:textSize="20sp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+
+                            <android.support.v7.widget.RecyclerView
+                                android:id="@+id/daily_forecast"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                            </android.support.v7.widget.RecyclerView>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:padding="5dp"
+                            android:layout_marginTop="20dp"
+                            android:background="@color/colorHalfTransparent"
+                            android:orientation="vertical"
+                            android:id="@+id/aqi_layout"
+                            android:layout_below="@+id/forecast"
+                            android:layout_width="match_parent"
+                            android:layout_height="140dp">
+                            <TextView
+                                android:textColor="@color/colorWhite"
+                                android:layout_margin="5dp"
+                                android:text="@string/aqi"
+                                android:textStyle="bold"
+                                android:textSize="20sp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+
+                                <LinearLayout
+                                    android:gravity="center"
+                                    android:layout_weight="1"
+                                    android:layout_width="0dp"
+                                    android:orientation="vertical"
+                                    android:layout_height="match_parent">
+                                    <TextView
+                                        android:id="@+id/aqi"
+                                        android:textColor="@color/colorWhite"
+                                        android:textSize="50sp"
+                                        android:text="63"
+                                        android:gravity="center"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content" />
+
+                                    <TextView
+                                        android:textColor="@color/colorWhite"
+                                        android:textSize="14sp"
+                                        android:gravity="center"
+                                        android:text="@string/aqiindex"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content" />
+                                </LinearLayout>
+                                <LinearLayout
+                                    android:layout_weight="1"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent">
+
+                                    <LinearLayout
+                                        android:layout_weight="1"
+                                        android:layout_width="0dp"
+                                        android:orientation="vertical"
+                                        android:layout_height="match_parent">
+                                        <TextView
+                                            android:id="@+id/pm25"
+                                            android:textColor="@color/colorWhite"
+                                            android:textSize="50sp"
+                                            android:text="63"
+                                            android:gravity="center"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content" />
+
+                                        <TextView
+                                            android:textColor="@color/colorWhite"
+                                            android:textSize="14sp"
+                                            android:gravity="center"
+                                            android:text="@string/pm2.5index"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content" />
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:padding="5dp"
+                            android:orientation="vertical"
+                            android:background="@color/colorHalfTransparent"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginBottom="20dp"
+                            android:layout_below="@+id/aqi_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:layout_margin="5dp"
+                                android:text="@string/life_suggest"
+                                android:textStyle="bold"
+                                android:textSize="20sp"
+                                android:textColor="@color/colorWhite"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content" />
 
                             <TextView
+                                android:id="@+id/comf"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:text="舒适度"
                                 android:textColor="@color/colorWhite"
-                                android:textSize="14sp"
-                                android:gravity="center"
-                                android:text="@string/pm2.5index"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+
+                            <TextView
+                                android:id="@+id/drsg"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:text="舒适度"
+                                android:textColor="@color/colorWhite"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+
+                            <TextView
+                                android:id="@+id/flu"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:text="舒适度"
+                                android:textColor="@color/colorWhite"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+
+                            <TextView
+                                android:id="@+id/sport"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:text="舒适度"
+                                android:textColor="@color/colorWhite"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+
+                            <TextView
+                                android:id="@+id/trav"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:text="舒适度"
+                                android:textColor="@color/colorWhite"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+
+                            <TextView
+                                android:id="@+id/uv"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:text="舒适度"
+                                android:textColor="@color/colorWhite"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content" />
                         </LinearLayout>
-                    </LinearLayout>
-                </LinearLayout>
+                    </RelativeLayout>
 
-            </LinearLayout>
+                </ScrollView>
+            </android.support.v4.widget.SwipeRefreshLayout>
 
-            <LinearLayout
-                android:padding="5dp"
-                android:orientation="vertical"
-                android:background="@color/colorHalfTransparent"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
-                android:layout_below="@+id/aqi_layout"
-                android:layout_width="match_parent"
-                android:layout_height="200dp">
-                <TextView
-                    android:layout_margin="5dp"
-                    android:text="@string/life_suggest"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
-                    android:textColor="@color/colorWhite"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <TextView
-                    android:id="@+id/comf"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:text="舒适度"
-                    android:textColor="@color/colorWhite"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <TextView
-                    android:id="@+id/drsg"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:text="舒适度"
-                    android:textColor="@color/colorWhite"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <TextView
-                    android:id="@+id/flu"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:text="舒适度"
-                    android:textColor="@color/colorWhite"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <TextView
-                    android:id="@+id/sport"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:text="舒适度"
-                    android:textColor="@color/colorWhite"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <TextView
-                    android:id="@+id/trav"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:text="舒适度"
-                    android:textColor="@color/colorWhite"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <TextView
-                    android:id="@+id/uv"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:text="舒适度"
-                    android:textColor="@color/colorWhite"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
         </RelativeLayout>
 
-    </ScrollView>
+        <fragment
+            android:id="@+id/choose_area_fragment"
+            android:name="cn.edu.nuc.androidlab.weather.ui.fragment.ChooseAreaFragment"
+            android:layout_width="match_parent"
+            android:layout_gravity = "start"
+            android:layout_height="match_parent"/>
 
+    </android.support.v4.widget.DrawerLayout>
 
-
-</RelativeLayout>
+</FrameLayout>

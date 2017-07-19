@@ -50,7 +50,7 @@ class AreaManager private constructor(){
             AreaDbHelper.instance.use {
                 val rowParser = classParser<City>()
                 select(CityTable.NAME)
-                        .whereArgs("(id = {province_id})", "province_id" to province_id)
+                        .whereArgs("(province = {province_id})", "province_id" to province_id)
                         .parseList(rowParser)
             }
 
@@ -69,7 +69,15 @@ class AreaManager private constructor(){
             AreaDbHelper.instance.use {
                 val rowParser = classParser<Country>()
                 select(CountryTable.NAME)
-                        .whereArgs("(id={city_id})", "city_id" to city_id)
+                        .whereArgs("(city={city_id})", "city_id" to city_id)
+                        .parseList(rowParser)
+            }
+
+    fun queryCountryByWeatherId(weather_id : String) : List<Country> =
+            AreaDbHelper.instance.use {
+                val rowParser = classParser<Country>()
+                select(CountryTable.NAME)
+                        .whereArgs("(weather_id={weather_id})", "weather_id" to weather_id)
                         .parseList(rowParser)
             }
 }

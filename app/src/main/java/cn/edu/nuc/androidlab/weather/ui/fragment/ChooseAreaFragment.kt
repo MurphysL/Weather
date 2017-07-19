@@ -18,11 +18,13 @@ import cn.edu.nuc.androidlab.weather.bean.Country
 import cn.edu.nuc.androidlab.weather.bean.Province
 import cn.edu.nuc.androidlab.weather.db.AreaManager
 import cn.edu.nuc.androidlab.weather.service.Service
+import cn.edu.nuc.androidlab.weather.ui.activity.MainActivity
 import cn.edu.nuc.androidlab.weather.ui.activity.WeatherActivity
 
 
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.activity_weather.*
 import java.util.*
 
 /**
@@ -162,11 +164,12 @@ class ChooseAreaFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = inflater?.inflate(R.layout.fragment_choose_area, container, false)
         toolbar = rootView?.findViewById(R.id.toolbar)!!
+
         recyclerView = rootView.findViewById(R.id.recyclerView)!!
         val layoutManager = LinearLayoutManager(context)
         recyclerView.layoutManager = layoutManager
 
-        adapter = AreaAdapter(context, data)
+        adapter = AreaAdapter(data)
         adapter.listener = object : MyClickListener {
             override fun onClick(position: Int) {
                 data.clear()
@@ -179,10 +182,18 @@ class ChooseAreaFragment : Fragment() {
                     loadCountry()
                     curentLevel = COUNTRY_LEVEL
                 }else{
-                    val intent : Intent = Intent(context, WeatherActivity::class.java)
-                    println(country[position].weather_id)
-                    intent.putExtra("country_code", country[position].weather_id)
-                    startActivity(intent)
+                    if(activity is MainActivity){
+                        val intent : Intent = Intent(context, WeatherActivity::class.java)
+                        println(country[position].weather_id)
+                        intent.putExtra("country_code", country[position].weather_id)
+                        startActivity(intent)
+                    }else if( activity is WeatherActivity){
+                        val a = activity as WeatherActivity
+                        activity.drawer_layout.closeDrawers()
+                        activity.swipe.isRefreshing = true
+                        a.handleWeather(country[position].weather_id)
+                    }
+
                 }
             }
         }

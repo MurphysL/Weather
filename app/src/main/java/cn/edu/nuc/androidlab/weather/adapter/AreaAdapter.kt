@@ -1,8 +1,6 @@
 package cn.edu.nuc.androidlab.weather.adapter
 
-import android.content.Context
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +12,7 @@ import java.util.*
  * AreaAdapter
  * Created by MurphySL on 2017/7/17.
  */
-class AreaAdapter(private val context : Context, private val data : ArrayList<String>) : RecyclerView.Adapter<MyViewHolder>() {
+class AreaAdapter(private val data : ArrayList<String>) : RecyclerView.Adapter<MyViewHolder>() {
     private val TAG : String = this.javaClass.simpleName
 
     var listener : MyClickListener? = null
@@ -25,7 +23,7 @@ class AreaAdapter(private val context : Context, private val data : ArrayList<St
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): MyViewHolder {
-        val root = LayoutInflater.from(context).inflate(R.layout.item_area, parent, false)
+        val root = LayoutInflater.from(parent?.context).inflate(R.layout.item_area, parent, false)
         return MyViewHolder(root)
     }
 
@@ -33,10 +31,10 @@ class AreaAdapter(private val context : Context, private val data : ArrayList<St
 
 }
 
-interface MyClickListener {
-    fun onClick(position : Int)
-}
-
 class MyViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
     var textView : TextView = itemView.findViewById(R.id.textView)
+}
+
+interface MyClickListener {
+    fun onClick(position : Int)
 }
