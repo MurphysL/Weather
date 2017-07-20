@@ -26,6 +26,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_weather.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
+import java.io.*
 import java.net.URL
 
 /**
@@ -43,6 +44,8 @@ class WeatherActivity : AppCompatActivity(){
     private var location_city : String = "北京"
     private var location_country : String = "朝阳"
 
+    private lateinit var weather_cache_path : String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
@@ -52,6 +55,7 @@ class WeatherActivity : AppCompatActivity(){
         }
         setContentView(R.layout.activity_weather)
 
+        weather_cache_path = "${cacheDir.absolutePath}${File.pathSeparator}weather.txt"
         pref = PreferenceManager.getDefaultSharedPreferences(context)
 
         more.setOnClickListener {
@@ -169,8 +173,11 @@ class WeatherActivity : AppCompatActivity(){
                                 val editor = PreferenceManager.getDefaultSharedPreferences(context).edit()
                                 editor.putString("country", location_country)
                                 editor.putString("weather_id", weather_id)
-                                editor.putString("weather", it.toString())
                                 editor.apply()
+
+                                val out = ObjectOutputStream(FileOutputStream(weather_cache_path))
+                                out.writeObject(it)
+                                out.close()
                             }
                             swipe.isRefreshing = false
                         },
@@ -190,9 +197,29 @@ class WeatherActivity : AppCompatActivity(){
 
         if(weather_id == null){
             weather_id = intent.getStringExtra("weather_id")
+            handleWeather(weather_id)
+        }else{
+            location_country = AreaManager.instance().queryCountryByWeatherId(weather_id)[0].name
+            tv_area.text = location_country
+
+            val weather = ObjectInputStream(FileInputStream(weather_cache_path)).readObject() as Weather?
+            if(weather != null){
+                Log.i(TAG, weather.toString())
+                val weather_detail : Weather.HeWeather = weather.HeWeather5[0]
+
+                if(weather_detail.status == "ok"){
+                    showForecast(weather_detail.daily_forecast)
+                    showAQI(weather_detail.aqi)
+                    showSuggestion(weather_detail.suggestion)
+                    showNow(weather_detail.now)
+                }
+                swipe.isRefreshing = false
+            }else{
+                handleWeather(weather_id)
+            }
+
         }
-        Log.i(TAG, weather_id)
-        handleWeather(weather_id)
+
 
     }
 

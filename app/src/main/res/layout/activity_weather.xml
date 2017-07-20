@@ -76,6 +76,7 @@
                             android:layout_alignParentRight="true" />
 
                         <LinearLayout
+                            android:padding="5dp"
                             android:orientation="vertical"
                             android:background="@color/colorHalfTransparent"
                             android:layout_marginTop="20dp"
